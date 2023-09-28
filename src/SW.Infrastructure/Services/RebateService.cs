@@ -1,4 +1,5 @@
 ﻿using SW.Core.Contracts;
+using SW.Core.Entities;
 using SW.Core.Services;
 using SW.Infrastructure.Data;
 
@@ -7,27 +8,28 @@ namespace SW.Infrastructure.Services;
 public class RebateService : IRebateService
 {
     private readonly IRebateCalculator _rebateCalculator;
+    private readonly IRepository<Product> _productDataStore;
+    private readonly IRepository<Rebate> _rebateDataStore;
 
-    public RebateService(IRebateCalculator rebateCalculator)
+    public RebateService(IRebateCalculator rebateCalculator, IRepository<Product> productDataStore, IRepository<Rebate> rebateDataStore)
     {
         _rebateCalculator = rebateCalculator;
+        _productDataStore = productDataStore;
+        _rebateDataStore = rebateDataStore;
     }
 
     public CalculateRebateResponse Calculate(CalculateRebateRequest request)
     {
-        var rebateDataStore = new RebateDataStore();
-        var productDataStore = new ProductDataStore();
-
         var result = new CalculateRebateResponse();
 
-        var product = productDataStore.GetProduct(request.ProductIdentifier);
+        var product = _productDataStore.Get(request.ProductIdentifier);
         if (product == null)
         {
             result.Success = false;
             return result;
         }
 
-        var rebate = rebateDataStore.GetRebate(request.RebateIdentifier);
+        var rebate = _rebateDataStore.Get(request.RebateIdentifier);
         if (rebate == null)
         {
             result.Success = false;
@@ -40,13 +42,12 @@ public class RebateService : IRebateService
             return result;
         }
 
-        var rebateAmount = 0m;
         result = _rebateCalculator.Calculate(request, product, rebate);
 
         if (result.Success)
         {
-            var storeRebateDataStore = new RebateDataStore();
-            storeRebateDataStore.StoreCalculationResult(rebate, rebateAmount);
+            rebate.Amount = result.RebateAmount;
+            _rebateDataStore.Save(rebate);
         }
 
         return result;

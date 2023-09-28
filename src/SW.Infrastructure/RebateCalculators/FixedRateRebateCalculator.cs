@@ -5,7 +5,7 @@ using SW.Core.Contracts;
 
 namespace SW.Infrastructure.RebateCalculators;
 
-internal class FixedRateRebateCalculator : IRebateCalculator
+public class FixedRateRebateCalculator : IRebateCalculator
 {
     public SupportedIncentiveType SupportedIncentiveType => SupportedIncentiveType.FixedRateRebate;
 

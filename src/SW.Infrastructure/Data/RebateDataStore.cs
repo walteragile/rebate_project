@@ -1,24 +1,26 @@
 ﻿using SW.Core.Types;
 using SW.Core.Entities;
+using SW.Core.Contracts;
 
 namespace SW.Infrastructure.Data;
 
-public class RebateDataStore
+public class RebateDataStore : IRepository<Rebate>
 {
-    public Rebate GetRebate(string rebateIdentifier)
+    public Rebate Get(string id)
     {
         // TODO: Access database to retrieve account (code removed for brevity)
         return new Rebate
         {
-            Identifier = rebateIdentifier,
+            Identifier = id,
             Incentive = IncentiveType.FixedRateRebate,
             Amount = 1m,
-            Percentage = rebateIdentifier == "R1" ? 0.1m : 0m,
+            Percentage = id == "R1" ? 0.1m : 0m,
         };
     }
 
-    public void StoreCalculationResult(Rebate account, decimal rebateAmount)
+    public Rebate Save(Rebate entity)
     {
-        // Update account in database, code removed for brevity
+        // TODO: Update account in database (code removed for brevity)
+        throw new NotImplementedException();
     }
 }
