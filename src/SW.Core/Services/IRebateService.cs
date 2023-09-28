@@ -2,5 +2,5 @@
 
 public interface IRebateService
 {
-    CalculateRebateResult Calculate(CalculateRebateRequest request);
+    CalculateRebateResponse Calculate(CalculateRebateRequest request);
 }
