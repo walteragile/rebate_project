@@ -1,10 +1,11 @@
-﻿using SW.Core.Types;
+﻿using Microsoft.Extensions.Logging;
+using SW.Core.Types;
 using SW.Core.Entities;
 using SW.Core.Services;
 using SW.Core.Contracts;
+using SW.Infrastructure.RebateCalculators;
 using SW.Infrastructure.Services;
 using Moq;
-using SW.Infrastructure.RebateCalculators;
 
 namespace SW.Infrastructure.Tests.Unit.Services;
 
@@ -13,6 +14,7 @@ public class RebateServiceTests
     private readonly Mock<IRebateCalculator> _rebateCalculatorMock;
     private readonly Mock<IRepository<Product>> _productRepositoryMock;
     private readonly Mock<IRepository<Rebate>> _rebateRepositoryMock;
+    private readonly Mock<ILogger<RebateService>> _loggerMock;
 
     RebateService _target;
 
@@ -21,8 +23,9 @@ public class RebateServiceTests
         _rebateCalculatorMock = new Mock<IRebateCalculator>();
         _productRepositoryMock = new Mock<IRepository<Product>>();
         _rebateRepositoryMock = new Mock<IRepository<Rebate>>();
+        _loggerMock = new Mock<ILogger<RebateService>>();
 
-        _target = new RebateService(_rebateCalculatorMock.Object, _productRepositoryMock.Object, _rebateRepositoryMock.Object);
+        _target = new RebateService(_rebateCalculatorMock.Object, _productRepositoryMock.Object, _rebateRepositoryMock.Object, _loggerMock.Object);
     }
 
     [Fact]
@@ -93,7 +96,7 @@ public class RebateServiceTests
         _rebateRepositoryMock.Setup(m => m.Get(It.IsAny<string>()))
             .Returns(rebate);
 
-        _target = new RebateService(new FixedRateRebateCalculator(), _productRepositoryMock.Object, _rebateRepositoryMock.Object);
+        _target = new RebateService(new FixedRateRebateCalculator(), _productRepositoryMock.Object, _rebateRepositoryMock.Object, _loggerMock.Object);
 
         // Act
         var result = _target.Calculate(request);

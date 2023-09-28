@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SW.Consola": {
+      "commandName": "Project",
+      "commandLineArgs": "incentiveType=fixedRateRebate rebateid=R1 productId=P1 Volume=2.0"
+    }
+  }
+}

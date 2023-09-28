@@ -18,9 +18,9 @@ public class RebateDataStore : IRepository<Rebate>
         };
     }
 
-    public Rebate Save(Rebate entity)
+    public Rebate Save(Rebate rebate)
     {
         // TODO: Update account in database (code removed for brevity)
-        throw new NotImplementedException();
+        return rebate;
     }
 }

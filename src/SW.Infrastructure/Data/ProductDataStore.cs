@@ -14,12 +14,12 @@ public class ProductDataStore : IRepository<Product>
             Identifier = id,
             Price = 10m,
             Uom = "uom",
-            SupportedIncentives = SupportedIncentiveType.FixedRateRebate,
+            SupportedIncentives = SupportedIncentiveType.FixedRateRebate | SupportedIncentiveType.AmountPerUom,
         };
     }
 
-    public Product Save(Product entity)
+    public Product Save(Product product)
     {
-        throw new NotImplementedException();
+        return product;
     }
 }
